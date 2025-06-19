@@ -1,27 +1,33 @@
-import React from 'react'
+import React from 'react';
 
-const MovieComponent = ( {movie: { title, vote_average, poster_path, release_date, original_language }} ) => {
+const MovieComponent = ({ movie: { Title, Year, Poster, Type, imdbID } }) => {
   return (
     <div className='movie-card'>
-        <img src={poster_path ? `https://image.tmdb.org/t/p/w500/${poster_path}` : './No-Poster.png'} alt={title} />
-        <div className='mt-4'>
-            <h3 className='text-white'>{title}</h3>
+      <img
+        src={Poster !== 'N/A' ? Poster : './No-Poster.png'}
+        alt={Title}
+      />
 
-            <div className='content'>
-                <div className='rating'>
-                    <img src="star.svg" alt="" />
-                    <p>{vote_average ? vote_average.toFixed(1) : 'N/A'}</p>
-                </div>
+      <div className='mt-4'>
+        <h3 className='text-white'>{Title}</h3>
 
-                <span>•</span>
-                <p className='lang'>{original_language}</p>
-                <span>•</span>
-                <p className='year'>{release_date ? release_date.split('-')[0] : 'N/A'}</p>
-            </div>
+        <div className='content'>
+          <p className='year'>{Year || 'N/A'}</p>
+          <span>•</span>
+          <p className='lang'>{Type || 'movie'}</p>
+          <span>•</span>
+          <a
+            className='text-blue-400 underline text-sm'
+            href={`https://www.imdb.com/title/${imdbID}`}
+            target='_blank'
+            rel='noopener noreferrer'
+          >
+            IMDb
+          </a>
         </div>
-        
+      </div>
     </div>
-  )
-}
+  );
+};
 
-export default MovieComponent
+export default MovieComponent;

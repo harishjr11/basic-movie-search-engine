@@ -4,15 +4,16 @@ import Spinner from './components/Spinner'
 import MovieComponent from './components/MovieComponent'
 import { useDebounce } from 'react-use';
 
-const API_BASE_URL = 'https://api.themoviedb.org/3';
+const API_BASE_URL = 'http://www.omdbapi.com/';
 
-const API_KEY = import.meta.env.VITE_TMDB_API_KEY;
+//const API_KEY = import.meta.env.VITE_TMDB_API_KEY;
+const API_KEY = import.meta.env.VITE_OMBD_API_KEY;
 
 const API_OPTIONS = {
   method: 'GET',
   headers: {
     accept: 'application/json',
-    Authorization: `Bearer ${API_KEY}`,
+    //Authorization: `Bearer ${API_KEY}`,
   }
 };
 
@@ -31,8 +32,10 @@ const App = () => {
 
     try {
       
-      const endpoint = query ? `${API_BASE_URL}/search/movie?query=${encodeURIComponent(query)}`
-      : `${API_BASE_URL}/discover/movie?sort_by=popularity.desc`;
+      const endpoint = query 
+      ? `${API_BASE_URL}?apikey=${API_KEY}&s=${encodeURIComponent(query)}`
+      : //`${API_BASE_URL}/discover/movie?sort_by=popularity.desc`;
+        `${API_BASE_URL}?apikey=${API_KEY}&s=daredevil`;
 
       const response = await fetch(endpoint,API_OPTIONS);
 
@@ -42,13 +45,13 @@ const App = () => {
 
       const data = await response.json();
 
-      if(data.Response === 'false'){
+      if(data.Response === 'False'){
         setErrorMsg(data.Error || 'Failed to fetch movies....');
         setMovieList([]);
         return;
       }
 
-      setMovieList(data.results || []);
+      setMovieList(data.Search || []);
 
     } catch (error) {
       console.log(`Error found : ${error}`);
@@ -86,7 +89,7 @@ const App = () => {
           ) : (
             <ul>
               {movieList.map((movie) => (
-                <MovieComponent key={movie.id} movie = {movie} />
+                <MovieComponent key={movie.imdbID} movie = {movie} />
               )
               )}
             </ul>
